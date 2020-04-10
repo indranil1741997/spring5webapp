@@ -1,9 +1,8 @@
 package guru.springframework.spring5webapp.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Publisher {
@@ -12,16 +11,41 @@ public class Publisher {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long Id;
 
-    private String street, city, state, zip;
+    private String name;
+    private String street;
+    private String city;
+    private String state;
+    private String zip;
 
-    public Publisher() {
-    }
+    @OneToMany
+    @JoinColumn(name = "publisher_id")
+    private Set<Book> books = new HashSet<>();
 
-    public Publisher(String street, String city, String state, String zip) {
+    public Publisher(String name, String street, String city, String state, String zip) {
+        this.name = name;
         this.street = street;
         this.city = city;
         this.state = state;
         this.zip = zip;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public Publisher() {
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getId() {
@@ -68,6 +92,7 @@ public class Publisher {
     public String toString() {
         return "Publisher{" +
                 "Id=" + Id +
+                ", name='" + name + '\'' +
                 ", street='" + street + '\'' +
                 ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
